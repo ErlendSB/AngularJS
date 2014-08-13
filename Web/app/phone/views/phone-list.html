@@ -1,0 +1,22 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-2">
+      <!--Sidebar content-->
+
+      Search: <input ng-model="$parent.query">
+
+    </div>
+    <div class="col-md-10">
+      <!--Body content-->
+
+      <ul class="phones">
+          <li ng-repeat="phone in phones | filter: filterFunction"
+              class="thumbnail phone-listing">
+              <a href="#/phones/{{phone.phoneId}}" class="thumb"><img ng-src="{{phone.imageUrl}}"></a>
+              <a href="#/phones/{{phone.phoneId}}">{{phone.name}}</a>
+              <p>{{phone.snippet}}</p>
+          </li>
+      </ul>
+    </div>
+  </div>
+</div>

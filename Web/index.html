@@ -1,0 +1,36 @@
+﻿<!doctype html>
+<html lang="en" ng-app="phonecatApp" ng-controller="MainCtrl">
+<head>
+    <meta charset="utf-8">
+    <title ng-bind-template="Google Phone Gallery: {{query.name}}">Google Phone Gallery</title>
+    <link rel="stylesheet" href="build/css/app.css">
+</head>
+<body>
+    <header class="page-header">
+        <nav class="navbar navbar-default">
+            <p class="navbar-text" ng-hide="!authentication.isAuth">Hei {{authentication.userName}}</p>
+            <p class="navbar-text">Logged in:{{authentication.isAuth}}</p>
+            <p class="navbar-text" style="padding-right:10px;" ng-hide="!authentication.isAuth"><a class="navbar-link" href="" ng-click="reload()">Reload</a></p>
+            <p class="navbar-text navbar-right" style="padding-right:10px;" ng-hide="!authentication.isAuth"><a class="navbar-link" href="" ng-click="logOut()">Logout</a></p>
+        </nav>
+    </header>
+        <!-- Modal -->
+        <div class="modal fade" id="LoginModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">Login</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div data-my-login></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div class="view-container">
+        <div ng-view class="view-frame"></div>
+    </div>
+    <script src="build/js/app.js"></script>
+
+</body>
+</html>
