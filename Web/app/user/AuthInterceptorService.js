@@ -16,7 +16,33 @@ function ($q, $injector, $log, localStorageService) {
         return config;
     }
 
+    var _response = function (response) {
+        $log.log('Response: ' + response.config.url + " - " + response.status);
+        if (response.status === 401) {
+            var authService = $injector.get('userService');
+            var authData = localStorageService.get('authorizationData');
+            if (authData) {
+                if (authData.useRefreshTokens) {
+                    $log.log('Interceptor Response error 401: userRefreshTokens:' + authData.useRefreshTokens);
+                    authService.refreshToken().then(function (response) {
+                        $log.log('Retrying request to: ' + response.config.url);
+                        var deferred = $q.defer();
+                        _retryHttpRequest(response.config, deferred);
+                        return deferred.promise;
+                    }, function () {
+                        $log.log('Rejected');
+                        //return $q.reject(rejection);
+                    });
+                }
+            }
+
+        }
+        return response;
+    }
+
     var _responseError = function (rejection) {
+        $log.log('ResponseError: ' + rejection.config.url + " - " + rejection.status);
+        var deferred = $q.defer();
         if (rejection.status === 401) {
             var authService = $injector.get('userService');
             var authData = localStorageService.get('authorizationData');
@@ -26,7 +52,6 @@ function ($q, $injector, $log, localStorageService) {
                     $log.log('Interceptor Response error 401: userRefreshTokens:' + authData.useRefreshTokens);
                     authService.refreshToken().then(function (response) {
                         $log.log('Retrying request to: ' + rejection.config.url);
-                        var deferred = $q.defer();
                         _retryHttpRequest(rejection.config, deferred);
                         return deferred.promise;
                     }, function () {
@@ -43,8 +68,12 @@ function ($q, $injector, $log, localStorageService) {
             //$route.reload();
 
         }
+        else {
+            deferred.reject(rejection);
+        }
         $log.log('responseError: ' + rejection.config.url);
-        return $q.reject(rejection);
+        //return $q.reject(rejection);
+        return deferred.promise;
     }
 
 
@@ -60,6 +89,7 @@ function ($q, $injector, $log, localStorageService) {
     }
     authInterceptorServiceFactory.request = _request;
     authInterceptorServiceFactory.responseError = _responseError;
+    //authInterceptorServiceFactory.response = _response;
 
     return authInterceptorServiceFactory;
 }]);

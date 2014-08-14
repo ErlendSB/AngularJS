@@ -1,6 +1,8 @@
 ﻿phonecatApp.controller('PhoneListCtrl', ['$scope', '$log', 'phoneService', 
   function ($scope,$log,phoneService) {
       $scope.phones = [];
+
+      //$scope.phones = phoneService.query();
       phoneService.query().then(function (result) {
           $log.log('PhoneListCtrl got data');
           $scope.phones = result;
