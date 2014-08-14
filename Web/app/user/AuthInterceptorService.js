@@ -1,4 +1,5 @@
-﻿phonecatServices.factory('authInterceptorService', ['$q', '$injector', '$location', '$log', 'localStorageService', function ($q, $injector, $location, $log, localStorageService) {
+﻿phonecatApp.factory('authInterceptorService', ['$q', '$injector', '$log', 'localStorageService',
+function ($q, $injector, $log, localStorageService) {
 
     var authInterceptorServiceFactory = {};
     var $http;
@@ -19,16 +20,18 @@
         if (rejection.status === 401) {
             var authService = $injector.get('userService');
             var authData = localStorageService.get('authorizationData');
-
+            //var $route = $injector.get('$route');
             if (authData) {
                 if (authData.useRefreshTokens) {
+                    $log.log('Interceptor Response error 401: userRefreshTokens:' + authData.useRefreshTokens);
                     authService.refreshToken().then(function (response) {
+                        $log.log('Retrying request to: ' + rejection.config.url);
                         var deferred = $q.defer();
                         _retryHttpRequest(rejection.config, deferred);
                         return deferred.promise;
                     }, function () {
                         $log.log('Rejected');
-                        $location.path('/');
+                        //$route.reload();
                         return $q.reject(rejection);
                     });
                 }
@@ -36,11 +39,14 @@
             //$log.log('Reloading');
             //authService.logOut();
             //$location.path('/');
-            //$location.reload();
+            //location.reload();
+            //$route.reload();
 
         }
+        $log.log('responseError: ' + rejection.config.url);
         return $q.reject(rejection);
     }
+
 
     var _retryHttpRequest = function (config, deferred) {
         $http = $http || $injector.get('$http');

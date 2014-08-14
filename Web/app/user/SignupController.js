@@ -1,4 +1,4 @@
-﻿phonecatControllers.controller('signupController', ['$scope', '$location', '$timeout', 'userService', function ($scope, $location, $timeout, userService) {
+﻿phonecatApp.controller('signupController', ['$scope', '$location', '$timeout', 'userService', function ($scope, $location, $timeout, userService) {
 
     $scope.savedSuccessfully = false;
     $scope.message = "";

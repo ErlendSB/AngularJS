@@ -1,4 +1,4 @@
-﻿phonecatServices.factory('tokensManagerService', ['$http', 'ngAuthSettings', function ($http, ngAuthSettings) {
+﻿phonecatApp.factory('tokensManagerService', ['$http', 'ngAuthSettings', function ($http, ngAuthSettings) {
 
     var serviceBase = ngAuthSettings.apiServiceBaseUri;
 

@@ -2,24 +2,24 @@
 
 /* Controllers */
 
-var phonecatControllers = angular.module('phonecatControllers', []);
+//var phonecatControllers = angular.module('phonecatControllers', []);
 
-/* Services */
+///* Services */
 
-var phonecatServices = angular.module('phonecatServices', ['ngResource']);
+//var phonecatServices = angular.module('phonecatServices', ['ngResource']);
 
 
 /* App Module */
 
 var phonecatApp = angular.module('phonecatApp', [
   'ngRoute',
-  'angular-loading-bar',
+  //'angular-loading-bar',
   'LocalStorageModule',
   'phonecatAnimations',
-  'phonecatControllers',
+  //'phonecatControllers',
   'phonecatDirectives',
   'phonecatFilters',
-  'phonecatServices'
+  //'phonecatServices'
 ]);
 
 phonecatApp.config(['$routeProvider',
@@ -48,11 +48,11 @@ phonecatApp.constant('ngAuthSettings', {
     clientId: 'ngAuthApp'
 });
 
-phonecatApp.config(['cfpLoadingBarProvider', function (cfpLoadingBarProvider) {
-    cfpLoadingBarProvider.includeSpinner = true;
-    cfpLoadingBarProvider.latencyThreshold = 50;
-    cfpLoadingBarProvider.includeBar = true;
-}]);
+//phonecatApp.config(['cfpLoadingBarProvider', function (cfpLoadingBarProvider) {
+//    cfpLoadingBarProvider.includeSpinner = true;
+//    cfpLoadingBarProvider.latencyThreshold = 50;
+//    cfpLoadingBarProvider.includeBar = true;
+//}]);
 
 phonecatApp.run(['userService', function (userService) {
     userService.fillAuthData();

@@ -1,4 +1,4 @@
-﻿phonecatControllers.controller('loginCtrl', ['$scope', '$location', '$route', 'userService', function ($scope, $location, $route, userService) {
+﻿phonecatApp.controller('loginCtrl', ['$scope', '$location', '$route', 'userService', function ($scope, $location, $route, userService) {
 
     $scope.loginData = {
         userName: "",

@@ -1,4 +1,4 @@
-﻿phonecatControllers.controller('MainCtrl', ['$scope', 'userService','$location',
+﻿phonecatApp.controller('MainCtrl', ['$scope', 'userService', '$location',
   function ($scope, userService, $location) {
       $scope.query = "";
       $scope.authentication = userService.authentication;
