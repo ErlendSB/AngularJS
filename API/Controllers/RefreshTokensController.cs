@@ -19,7 +19,7 @@ namespace API.Controllers
             _repo = new AuthRepository();
         }
 
-        [Authorize(Users = "Admin")]
+        [Authorize(Roles = "Admin")]
         [Route("")]
         public IHttpActionResult Get()
         {

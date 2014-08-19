@@ -4,7 +4,12 @@ body {
   padding-top: 20px;
 }
 
-
+#alerts {
+    position:absolute;
+    bottom:10px;
+    right:50px;
+    white-space:nowrap;
+}
 .phone-images {
   background-color: white;
   width: 450px;

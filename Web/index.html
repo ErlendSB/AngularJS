@@ -11,24 +11,15 @@
             <p class="navbar-text" ng-hide="!authentication.isAuth">Hei {{authentication.userName}}</p>
             <p class="navbar-text">Logged in:{{authentication.isAuth}}</p>
             <p class="navbar-text" style="padding-right:10px;" ng-hide="!authentication.isAuth"><a class="navbar-link" href="" ng-click="reload()">Reload</a></p>
+            <p class="navbar-text" style="padding-right:10px;" ng-hide="!authentication.isAuth"><a class="navbar-link" href="/#/tokens">Tokens</a></p>
             <p class="navbar-text navbar-right" style="padding-right:10px;" ng-hide="!authentication.isAuth"><a class="navbar-link" href="" ng-click="logOut()">Logout</a></p>
         </nav>
     </header>
-        <!-- Modal -->
-        <div class="modal fade" id="LoginModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title" id="myModalLabel">Login</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div data-my-login></div>
-                    </div>
-                </div>
-            </div>
-        </div>
     <div class="view-container">
         <div ng-view class="view-frame"></div>
+    </div>
+    <div id="alerts" ng-animate="'fade'">
+        <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
     </div>
     <script src="build/js/app.js"></script>
 

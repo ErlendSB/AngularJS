@@ -1,8 +1,10 @@
-﻿phonecatApp.factory('userService', ['$http', '$q', '$injector', 'localStorageService', 'ngAuthSettings', '$rootScope', function ($http, $q, $injector, localStorageService, ngAuthSettings, $rootScope) {
+﻿phonecatApp.factory('userService', ['$http', '$modal', '$q', '$log', '$injector', 'localStorageService', 'ngAuthSettings', '$rootScope',
+    function ($http, $modal, $q, $log, $injector, localStorageService, ngAuthSettings, $rootScope) {
 
     var serviceBase = ngAuthSettings.apiServiceBaseUri;
     var $http;
     var authServiceFactory = {};
+    var modalInstance = {};
 
     var _authentication = {
         isAuth: false,
@@ -44,8 +46,7 @@
             _authentication.userName = loginData.userName;
             _authentication.useRefreshTokens = loginData.useRefreshTokens;
 
-            $rootScope.$broadcast('UserLoggedIn');
-
+            modalInstance.close();
             deferred.resolve(response);
 
         }).error(function (err, status) {
@@ -65,8 +66,7 @@
         _authentication.userName = "";
         _authentication.useRefreshTokens = true;
 
-        $rootScope.$broadcast('UserLoggedOut');
-
+        _showLogin();
     };
 
     var _fillAuthData = function () {
@@ -78,10 +78,18 @@
             _authentication.useRefreshTokens = authData.useRefreshTokens;
         }
         else {
-            $('#LoginModal').modal('show');
+            _showLogin();
         }
 
     }
+
+    var _showLogin = function () {
+        $log.log('showLogin');
+        modalInstance = $modal.open({
+            templateUrl: '/app/user/views/login.html',
+            backdrop:'static'
+        });
+    };
 
     var _refreshToken = function () {
         var deferred = $q.defer();

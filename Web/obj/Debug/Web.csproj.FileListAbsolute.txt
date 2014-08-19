@@ -1,0 +1,6 @@
+C:\Dev\TestMVC\AngularTest\Web\bin\Web.dll.config
+C:\Dev\TestMVC\AngularTest\Web\bin\Web.dll
+C:\Dev\TestMVC\AngularTest\Web\bin\Web.pdb
+C:\Dev\TestMVC\AngularTest\Web\obj\Debug\Web.dll
+C:\Dev\TestMVC\AngularTest\Web\obj\Debug\Web.pdb
+C:\Dev\TestMVC\AngularTest\Web\obj\Debug\Web.csprojResolveAssemblyReference.cache

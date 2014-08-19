@@ -1,5 +1,5 @@
-﻿phonecatApp.factory('authInterceptorService', ['$q', '$injector', '$log', 'localStorageService',
-function ($q, $injector, $log, localStorageService) {
+﻿phonecatApp.factory('authInterceptorService', ['$q', '$injector', '$location', '$log', 'localStorageService', 'alertService',
+function ($q, $injector, $location, $log, localStorageService, alertService) {
 
     var authInterceptorServiceFactory = {};
     var $http;
@@ -16,80 +16,46 @@ function ($q, $injector, $log, localStorageService) {
         return config;
     }
 
-    var _response = function (response) {
-        $log.log('Response: ' + response.config.url + " - " + response.status);
-        if (response.status === 401) {
-            var authService = $injector.get('userService');
-            var authData = localStorageService.get('authorizationData');
-            if (authData) {
-                if (authData.useRefreshTokens) {
-                    $log.log('Interceptor Response error 401: userRefreshTokens:' + authData.useRefreshTokens);
-                    authService.refreshToken().then(function (response) {
-                        $log.log('Retrying request to: ' + response.config.url);
-                        var deferred = $q.defer();
-                        _retryHttpRequest(response.config, deferred);
-                        return deferred.promise;
-                    }, function () {
-                        $log.log('Rejected');
-                        //return $q.reject(rejection);
-                    });
-                }
-            }
-
-        }
-        return response;
-    }
-
     var _responseError = function (rejection) {
         $log.log('ResponseError: ' + rejection.config.url + " - " + rejection.status);
         var deferred = $q.defer();
-        if (rejection.status === 401) {
+        if (rejection.status === 403) {
+            alertService.add('danger', 'Access denied');
+            deferred.reject(rejection);
+        }
+        else if (rejection.status === 401) {
             var authService = $injector.get('userService');
-            var authData = localStorageService.get('authorizationData');
-            //var $route = $injector.get('$route');
-            if (authData) {
-                if (authData.useRefreshTokens) {
-                    $log.log('Interceptor Response error 401: userRefreshTokens:' + authData.useRefreshTokens);
-                    authService.refreshToken().then(function (response) {
-                        $log.log('Retrying request to: ' + rejection.config.url);
-                        _retryHttpRequest(rejection.config, deferred);
-                        return deferred.promise;
-                    }, function () {
-                        $log.log('Rejected');
-                        //$route.reload();
-                        return $q.reject(rejection);
-                    });
-                }
-            }
-            //$log.log('Reloading');
-            //authService.logOut();
-            //$location.path('/');
-            //location.reload();
-            //$route.reload();
-
+            authService.refreshToken().then(function (response) {
+                $log.log('Got new refresh token');
+                _retryHttpRequest(rejection.config, deferred);
+            }, function () {
+                //authService.logOut();
+                $log.log('refreshToken rejected');
+                //$location.path('/');
+                deferred.reject(rejection);
+            });
         }
         else {
             deferred.reject(rejection);
         }
-        $log.log('responseError: ' + rejection.config.url);
-        //return $q.reject(rejection);
         return deferred.promise;
     }
 
 
     var _retryHttpRequest = function (config, deferred) {
         $http = $http || $injector.get('$http');
+        $log.log('Retrying request to: ' + config.url);
+        config.headers.retry = '1';
         $http(config).then(function (response) {
-            $log.log('Got new refresh token - Resolved');
             deferred.resolve(response);
+            $log.log('Retry was resolved');
         }, function (response) {
-            $log.log('Got new refresh token - Rejected');
             deferred.reject(response);
+            $log.log('Retry was rejected');
         });
     }
     authInterceptorServiceFactory.request = _request;
     authInterceptorServiceFactory.responseError = _responseError;
-    //authInterceptorServiceFactory.response = _response;
 
     return authInterceptorServiceFactory;
 }]);

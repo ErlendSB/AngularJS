@@ -24,13 +24,13 @@ namespace API.Controllers
 
 
         [Authorize(Roles="Admin,API")]
-        public List<Phone> getAllPhones()
+        public IHttpActionResult getAllPhones()
         {
             string cid = ClaimsPrincipal.Current.Claims.SingleOrDefault(c => c.Type == "companyid").Value;
             try
             {
                 List<Phone> phones = this.db.Phones.ToList();
-                return phones;
+                return Ok(phones);
 
             }
             catch (Exception ex)

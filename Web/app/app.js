@@ -13,12 +13,13 @@
 
 var phonecatApp = angular.module('phonecatApp', [
   'ngRoute',
-  //'angular-loading-bar',
+  'angular-loading-bar',
   'LocalStorageModule',
   'phonecatAnimations',
   //'phonecatControllers',
   'phonecatDirectives',
   'phonecatFilters',
+  'ui.bootstrap'
   //'phonecatServices'
 ]);
 
@@ -36,6 +37,10 @@ phonecatApp.config(['$routeProvider',
       when('/phones/:phoneId', {
         templateUrl: 'app/phone/views/phone-detail.html',
         controller: 'PhoneDetailCtrl'
+      }).
+      when("/tokens", {
+            controller: "tokensManagerController",
+            templateUrl: "/app/user/views/tokens.html"
       }).
       otherwise({
         redirectTo: '/phones'

@@ -1,5 +1,9 @@
-﻿phonecatApp.controller('MainCtrl', ['$scope', 'userService', '$location',
-  function ($scope, userService, $location) {
+﻿phonecatApp.controller('MainCtrl', ['$scope', '$rootScope', '$log','$modal','userService', '$location','alertService',
+  function ($scope, $rootScope, $log,$modal,userService, $location, alertService) {
+      $scope.alerts = $rootScope.alerts;
+      $scope.closeAlert = function (index) {
+          alertService.closeAlert(index);
+      };
       $scope.query = "";
       $scope.authentication = userService.authentication;
       $scope.logOut = function () {
@@ -9,14 +13,5 @@
       $scope.reload = function () {
           $location.path('/');
       };
-
-      $scope.$on('UserLoggedIn', function () {
-          $('#LoginModal').modal('hide');
-      });
-
-      $scope.$on('UserLoggedOut', function () {
-          $('#LoginModal').modal('show');
-          $('#LoginModal form')[0].reset();
-      });
 
   }]);
